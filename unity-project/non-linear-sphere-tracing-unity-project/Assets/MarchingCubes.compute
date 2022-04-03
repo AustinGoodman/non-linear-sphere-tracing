@@ -1,0 +1,92 @@
+﻿#pragma kernel March
+
+#include "MarchTables.compute"
+#include "SceneDefinition.cginc"
+
+static const int numThreads = 8;
+
+struct Triangle {
+    float3 p0;
+    float3 p1;
+    float3 p2;
+};
+
+AppendStructuredBuffer<Triangle> triangles;
+
+uniform int cellCountPerAxis;
+uniform float cellSize;
+uniform float sdfPadding;
+
+int indexFromCoord(int x, int y, int z) {
+    return z * cellCountPerAxis * cellCountPerAxis + y * cellCountPerAxis + x;
+}
+
+float3 getCellCenter(int x, int y, int z) {
+    return float3(2.0f*(x - 0.5f*cellCountPerAxis)*cellSize, 2.0f*(y - 0.5f*cellCountPerAxis)*cellSize, 2.0f*(z - 0.5f*cellCountPerAxis)*cellSize); //+ 0.5f*cellSize*float3(1.0, 1.0, 1.0);
+}
+
+float getValue(float3 pos) {
+    return getSDF(pos) - sdfPadding;
+}
+
+float3 interpolateVerts(float3 v1, float3 v2) {
+    float dist1 = getValue(v1);
+    float dist2 = getValue(v2);
+    float t = -dist1/(dist2 - dist1);
+    return v1 + t*(v2-v1);
+}
+
+[numthreads(numThreads,numThreads,numThreads)]
+void March (int3 id : SV_DispatchThreadID)
+{   
+    // Stop one point before the end because voxel includes neighbouring points
+    if (id.x >= cellCountPerAxis  || id.y >= cellCountPerAxis  || id.z >= cellCountPerAxis ) {
+        return;
+    }
+
+    // 8 corners of the current cube
+    float3 cubeCorners[8] = {
+        getCellCenter(id.x, id.y, id.z),
+        getCellCenter(id.x + 1, id.y, id.z),
+        getCellCenter(id.x + 1, id.y, id.z + 1),
+        getCellCenter(id.x, id.y, id.z + 1),
+        getCellCenter(id.x, id.y + 1, id.z),
+        getCellCenter(id.x + 1, id.y + 1, id.z),
+        getCellCenter(id.x + 1, id.y + 1, id.z + 1),
+        getCellCenter(id.x, id.y + 1, id.z + 1)
+    };
+
+    // Calculate unique index for each cube configuration.
+    // There are 256 possible values
+    // A value of 0 means cube is entirely inside surface; 255 entirely outside.
+    // The value is used to look up the edge table, which indicates which edges of the cube are cut by the isosurface.
+    int cubeIndex = 0;
+    if (getValue(cubeCorners[0].xyz) < 0.0f) cubeIndex |= 1;
+    if (getValue(cubeCorners[1].xyz) < 0.0f) cubeIndex |= 2;
+    if (getValue(cubeCorners[2].xyz) < 0.0f) cubeIndex |= 4;
+    if (getValue(cubeCorners[3].xyz) < 0.0f) cubeIndex |= 8;
+    if (getValue(cubeCorners[4].xyz) < 0.0f) cubeIndex |= 16;
+    if (getValue(cubeCorners[5].xyz) < 0.0f) cubeIndex |= 32;
+    if (getValue(cubeCorners[6].xyz) < 0.0f) cubeIndex |= 64;
+    if (getValue(cubeCorners[7].xyz) < 0.0f) cubeIndex |= 128;
+
+    // Create triangles for current cube configuration
+    for (int i = 0; triangulation[cubeIndex][i] != -1; i +=3) {
+        // Get indices of corner points A and B for each of the three edges
+        // of the cube that need to be joined to form the triangle.
+        int a0 = cornerIndexAFromEdge[triangulation[cubeIndex][i]];
+        int b0 = cornerIndexBFromEdge[triangulation[cubeIndex][i]];
+
+        int a1 = cornerIndexAFromEdge[triangulation[cubeIndex][i+1]];
+        int b1 = cornerIndexBFromEdge[triangulation[cubeIndex][i+1]];
+
+        int a2 = cornerIndexAFromEdge[triangulation[cubeIndex][i+2]];
+        int b2 = cornerIndexBFromEdge[triangulation[cubeIndex][i+2]];
+
+        Triangle tri;
+        tri.p2 = interpolateVerts(cubeCorners[a0], cubeCorners[b0]);
+        tri.p1 = interpolateVerts(cubeCorners[a1], cubeCorners[b1]);
+        tri.p0 = interpolateVerts(cubeCorners[a2], cubeCorners[b2]);
+        triangles.Append(tri);
+    }
+}
