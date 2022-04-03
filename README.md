@@ -507,7 +507,7 @@ Your sdf should now be lit.
 <br/>
 
 ## Part 7.1 - Marching Cubes Bounding Mesh
-Unfortunately, the inverse of our deformations must be found once at the start of the non linear raymarch. The proposed solution is to replace our cube mesh with a mesh which closely bounds our signed distance field and then deform that mesh (or rather the space around it). See a paper for an explanation of how this uses the rasterizer to find the inverse starting point.
+Unfortunately, the inverse of our deformation must be found once at the start of the non linear raymarch. The proposed solution is to replace our cube mesh with a mesh which closely bounds our signed distance field and then deform that mesh. As the paper explains, this works becuase the point of intersection between a ray and a piece of geometry transformes inversly to how the geometry itself transforms under that deformation. The rasterizer automatically finds that point of intersection for us. In other words, instead of applying the inverse deformation (which we do not have) to our ray origin, we discretize a region of space around the sdf, deform that region, and then the rasterizer will supply us with the new starting point which is an approximation of what we would have had if we could explicitly apply the inverse deformation to the ray origin.
 
 To find a bounding mesh for our signed distance field we can use a compute shader which executes a marching cubes algorithm. For this part I'll supply you with a slightly modified implementation from Sabastian Lague given at https://github.com/SebLague/Marching-Cubes.
 
