@@ -444,6 +444,10 @@ Shader "Unlit/Raymarch" {
 
 <br/>
 
+**Note: if you can't see your sdf, make sure your cube is centered at (0, 0, 0) and is large enough to enclose the sdf.**
+
+<br/>
+
 ## Part 6 - Basic Lighting
 This is standard raymarching stuff so I won't explain it. Modify your fragment shader with this code and your sdf scene will be lit with Unity's directional light. 
 ```HLSL
