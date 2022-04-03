@@ -147,7 +147,7 @@ Shader "Unlit/Raymarch" {
 ```
 <br/>
 
-To check that the tessellation is working you can enable the Select Wire gizmo in the Unity scene editor. Changing Tesselation Factor on the cubes material should result in more triangles becoming visible.
+To check that the tessellation is working you can enable the Select Wire gizmo in the Unity scene editor. Changing Tesselation Factor on the cube's material should result in more triangles becoming visible.
 
 <br/>
 
