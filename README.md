@@ -1,4 +1,4 @@
-# Nonlinear Spheretracing Implementation Example
+# Nonlinear Sphere Tracing Tutorial
 
 ## Part 0 - Read the Paper
 https://cs.dartmouth.edu/wjarosz/publications/seyb19nonlinear.html
