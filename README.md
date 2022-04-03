@@ -514,7 +514,7 @@ Put MarchingCubes.cs on your cube and assign MarchingCubes.compute to the Comput
 Tweak the Cell Size and Cell Count Per Axis properties on the Marching Cubes component and rebuild the mesh until you can see that the generated mesh properly encloses your sdf.
 
 <figure>
-     <figcaption>And enclosing mesh for our signed distance field</figcaption>
+     <figcaption>An enclosing mesh for our signed distance field</figcaption>
     <img src="https://user-images.githubusercontent.com/80550270/161432723-f72d9b80-809c-4829-9fe3-0006d197f461.png">
 </figure> 
 
