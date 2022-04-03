@@ -439,7 +439,8 @@ Shader "Unlit/Raymarch" {
     }
 }
 ```
-
+<br/>
+You should now be able to see your sdf.
 ![image](https://user-images.githubusercontent.com/80550270/161395022-1dc6fcf7-ae60-48c9-a403-2b3943563ade.png)
 
 <br/>
