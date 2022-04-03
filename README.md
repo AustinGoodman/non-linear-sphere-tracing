@@ -4,7 +4,7 @@
 https://cs.dartmouth.edu/wjarosz/publications/seyb19nonlinear.html
 
 ## Part 1 - Creating a Simple Pass Through Shader
-Create a new unlit shader asset from Unity's asset manager. You can delete all the unnecessary Unity stuff and change all the default names to something a little less deranged. After that, all you need to do for this part is create a vertex shader that transforms the vertex position attributes from object space to clip space. Once you're done you should have something like this:
+Create a new unlit shader asset from Unity's asset manager. You can delete all the unnecessary Unity stuff and change all the default names to something a little less deranged. After that, all you need to do for this part is create a vertex shader that transforms the vertex position attributes from object space to clip space.
 ```HLSL
 Shader "Unlit/Raymarch" {
     Properties {
@@ -215,8 +215,8 @@ VertexInterpolants vertexShader (VertexAttributes va) {
 ```
 <br/>
 
-## Part 5 - Normal Raymarching
-Now we are ready to implement a standard raymarcher. First thing's first we need to take in the standard raymarching parameters from the unity editor as properties: 
+## Part 5 - Standard Raymarching
+Now we are ready to implement a standard raymarcher. First thing's first we need to take in the standard raymarching parameters from the unity editor as properties
 ```HLSL
 Properties {
     MAX_STEPS ("Max Raymarch Steps", Int) = 200
@@ -228,7 +228,7 @@ Properties {
 ```
 <br/>
 
-and make sure to define variables for each of the parameters we took in:
+and make sure to define variables for each of the parameters we took in
 ```HLSL
 int MAX_STEPS;
 float THRESHOLD;
@@ -238,7 +238,7 @@ int TESSELLATION_FACTOR;
 ```
 <br/>
 
-Next we will make a struct called SceneHit which will be the data type returned from the raymarching function: 
+Next we will make a struct called SceneHit which will be the data type returned from the raymarching function
 ```HLSL
 struct SceneHit {
     float3 position;
@@ -249,7 +249,7 @@ struct SceneHit {
 ```
 <br/>
 
-and finally the raymarching funciton: 
+and finally the raymarching funciton
 ```HLSL
 SceneHit raymarch(float3 rayOrigin, float3 rayDirection) {
     SceneHit sceneHit;
@@ -278,7 +278,7 @@ SceneHit raymarch(float3 rayOrigin, float3 rayDirection) {
 }
 ```
 
-We can now raymarch from the fragment shader: 
+We can now raymarch from the fragment shader
 ```HLSL
 float4 fragmentShader (VertexInterpolants vi) : SV_Target {
     float4 color = float4(1.0, 0.0, 0.0, 1);    
@@ -625,7 +625,7 @@ With all that we finally have everything we need to implement the nonlinear sphe
 <br/>
 
 ## Part 8 - Nonlinear Raymarching
-Now create the nonlinear raymarching function according to the method described in the paper. The paper does not explain how the normals are to be calculated on the deformed geometry but it turns out that they transform simply with the transpose of the jacobian so we can reuse our getNormal method from before.
+Now we can create the nonlinear raymarching function according to the method described in the paper. The paper does not explain how the normals are to be calculated on the deformed geometry but it turns out that they transform simply with the transpose of the jacobian so we can reuse our getNormal method from before.
 ```HLSL
 SceneHit raymarchNonlinear(float3 rayOrigin, float3 omega0) {
     SceneHit sceneHit;
