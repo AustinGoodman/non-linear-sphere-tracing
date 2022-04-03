@@ -441,6 +441,7 @@ Shader "Unlit/Raymarch" {
 ```
 <br/>
 You should now be able to see your sdf.
+
 ![image](https://user-images.githubusercontent.com/80550270/161395022-1dc6fcf7-ae60-48c9-a403-2b3943563ade.png)
 
 <br/>
@@ -498,6 +499,9 @@ float3 gammaCorrectInverse(float3 color) {
     return color;
 }
 ```
+<br/>
+Your sdf should now be lit.
+
 ![image](https://user-images.githubusercontent.com/80550270/161395278-5ba7d917-ae1e-4ced-a707-4da154987603.png)
 
 <br/>
