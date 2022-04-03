@@ -449,7 +449,7 @@ Shader "Unlit/Raymarch" {
 <br/>
 
 ## Part 6 - Basic Lighting
-This is standard raymarching stuff so I won't explain it. Modify your fragment shader with this code and your sdf scene will be lit with Unity's directional light. 
+This is standard raymarching stuff so I won't explain it. Modify your fragment shader with this code and your sdf scene will be lit with Unity's directional light. I have added a property MATERIAL_COLOR to the shader so we may modify the sdf color from the inspector.
 ```HLSL
 float4 fragmentShader (VertexInterpolants vi) : SV_Target {
     float4 color = float4(1.0, 0.0, 0.0, 1);    
