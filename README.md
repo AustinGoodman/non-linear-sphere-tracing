@@ -57,7 +57,7 @@ Now create a material and attach the shader to it. Create a cube with the materi
 
 <br/>
 
-## Part 2 - Boilerplate Tesselation Shader
+## Part 2 - Boilerplate Tessellation Shader
 I would like to keep this tutorial as simple and short as possible so instead of implementing the dynamic tessellation scheme described in the paper, I will instead just include a simple shader which subdivides the mesh indiscriminately. I won't explain tessellation shaders here but https://catlikecoding.com/unity/tutorials/advanced-rendering/tessellation/ is a good introduction. There won't be any changes to the tessellation side of things going forward so you can just copy and paste the code if you don't understand it all.
 ```HLSL
 Shader "Unlit/Raymarch" {
